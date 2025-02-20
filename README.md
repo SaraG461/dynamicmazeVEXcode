@@ -2,7 +2,7 @@
 VEXcode VR Dynamic Maze-solving Robot 🤖	
 ## 📌 Overview
 This project is a **dynamic maze-solving robot** programmed in **Python using VEXcode VR**.  
-The robot navigates through a **dynamic maze**, detects walls, avoids obstacles, and reaches a **goal tile (red)**.  
+The robot navigates through a **dynamic maze**, detects walls, avoids obstacles, reaches a **goal tile (red)** and returns to **home**.  
 
 It then **returns to its starting position**, drawing its path in different colours:  
 - ** Blue** for the path towards the goal.  
