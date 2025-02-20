@@ -1,1 +1,99 @@
-{"mode":"Text","hardwareTarget":"brain","textContent":"#region VEXcode Generated Robot Configuration\nimport math\nimport random\nfrom vexcode_vr import *\n\n# Brain should be defined by default\nbrain = Brain()\n\ndrivetrain = Drivetrain(\"drivetrain\", 0)\npen = Pen(\"pen\", 8)\npen.set_pen_width(THIN)\nleft_bumper = Bumper(\"leftBumper\", 2)\nright_bumper = Bumper(\"rightBumper\", 3)\nfront_eye = EyeSensor(\"frontEye\", 4)\ndown_eye = EyeSensor(\"downEye\", 5)\nfront_distance = Distance(\"frontdistance\", 6)\ndistance = front_distance\nmagnet = Electromagnet(\"magnet\", 7)\nlocation = Location(\"location\", 9)\n\n#endregion VEXcode Generated Robot Configuration\n\ndef go_to(x_loc, y_loc):\n    # Function to move the robot to a specific coordinate (x_loc, y_loc)\n    b = x_loc - location.position(X, MM)\n    c = y_loc - location.position(Y, MM)\n\n    if b == 0 and c == 0:\n        pass\n    else:\n        a = math.sqrt(b**2 + c**2)\n        angle = math.asin((math.sin(math.pi / 2) * b) / a) / math.pi * 180\n\n        if c < 0:\n            angle = 180 - angle\n\n        drivetrain.turn_to_heading(angle, DEGREES)\n        drivetrain.drive_for(FORWARD, a, MM)\n\ndef follow_left_wall():\n    # Follow the left-hand wall (wall-following algorithm)\n    if front_eye.is_detecting():\n        drivetrain.drive(FORWARD)\n    else:\n        drivetrain.turn_for(LEFT, 90, DEGREES)\n        drivetrain.drive(FORWARD)\n\ndef main():\n    cords_list = []\n    drivetrain.set_drive_velocity(100, PERCENT)\n    drivetrain.set_turn_velocity(100, PERCENT)\n\n    # Starting point\n    cords_list.append([location.position(X, MM), location.position(Y, MM)])\n\n    \n    while not down_eye.detect(RED):  \n        if distance.get_distance(MM) > 260:  \n            drivetrain.drive_for(FORWARD, 250, MM)\n            drivetrain.turn_for(RIGHT, 90, DEGREES)\n\n            # Avoid loops 9check if it is revisiting)\n            if len(cords_list) > 2:  \n                prev_x = cords_list[-2][0]\n                prev_y = cords_list[-2][1]\n\n                # Remove loops \n                if abs(prev_x - location.position(X, MM)) < 5 and abs(prev_y - location.position(Y, MM)) < 5:\n                    cords_list.pop()\n                    cords_list.pop()\n                    brain.clear()\n                    brain.print(len(cords_list))\n\n            cords_list.append([location.position(X, MM), location.position(Y, MM)])\n            brain.clear()\n            brain.print(len(cords_list))\n        else:\n            drivetrain.turn_for(LEFT, 90, DEGREES)\n        wait(5, MSEC)\n        pen.set_pen_color(BLUE)\n        pen.move(DOWN)\n\n    \n\n    # find the shortest path back to the starting point\n    \n    pen.set_pen_color(GREEN)\n    pen.move(DOWN)\n\n    cords_list.reverse()  # Reverse \n\n    for i in range(len(cords_list)):\n        go_to(cords_list[i][0], cords_list[i][1])\n\n    # Once at home, stop the project\n    pen.move(UP)\n    stop_project()\n\nvr_thread(main())\n","textLanguage":"python","robotConfig":[],"slot":0,"platform":"PG","sdkVersion":"20240802.15.00.00","appVersion":"4.0.8","minVersion":"3.0.0","fileFormat":"2.0.0","targetBrainGen":"First","v5SoundsEnabled":false,"playground":"DynamicWallMaze","robotModel":"vr"}
+#region VEXcode Generated Robot Configuration
+import math
+import random
+from vexcode_vr import *
+
+# Brain should be defined by default
+brain=Brain()
+
+drivetrain = Drivetrain("drivetrain", 0)
+pen = Pen("pen", 8)
+pen.set_pen_width(THIN)
+left_bumper = Bumper("leftBumper", 2)
+right_bumper = Bumper("rightBumper", 3)
+front_eye = EyeSensor("frontEye", 4)
+down_eye = EyeSensor("downEye", 5)
+front_distance = Distance("frontdistance", 6)
+distance = front_distance
+magnet = Electromagnet("magnet", 7)
+location = Location("location", 9)
+
+#endregion VEXcode Generated Robot Configuration
+
+def go_to(x_loc, y_loc):
+    # Function to move the robot to a specific coordinate (x_loc, y_loc)
+    b = x_loc - location.position(X, MM)
+    c = y_loc - location.position(Y, MM)
+
+    if b == 0 and c == 0:
+        pass
+    else:
+        a = math.sqrt(b**2 + c**2)
+        angle = math.asin((math.sin(math.pi / 2) * b) / a) / math.pi * 180
+
+        if c < 0:
+            angle = 180 - angle
+
+        drivetrain.turn_to_heading(angle, DEGREES)
+        drivetrain.drive_for(FORWARD, a, MM)
+
+def follow_left_wall():
+    # Follow the left-hand wall (wall-following algorithm)
+    if front_eye.is_detecting():
+        drivetrain.drive(FORWARD)
+    else:
+        drivetrain.turn_for(LEFT, 90, DEGREES)
+        drivetrain.drive(FORWARD)
+
+def main():
+    cords_list = []
+    drivetrain.set_drive_velocity(100, PERCENT)
+    drivetrain.set_turn_velocity(100, PERCENT)
+
+    # Starting point
+    cords_list.append([location.position(X, MM), location.position(Y, MM)])
+
+    
+    while not down_eye.detect(RED):  
+        if distance.get_distance(MM) > 260:  
+            drivetrain.drive_for(FORWARD, 250, MM)
+            drivetrain.turn_for(RIGHT, 90, DEGREES)
+
+            # Avoid loops 9check if it is revisiting)
+            if len(cords_list) > 2:  
+                prev_x = cords_list[-2][0]
+                prev_y = cords_list[-2][1]
+
+                # Remove loops 
+                if abs(prev_x - location.position(X, MM)) < 5 and abs(prev_y - location.position(Y, MM)) < 5:
+                    cords_list.pop()
+                    cords_list.pop()
+                    brain.clear()
+                    brain.print(len(cords_list))
+
+            cords_list.append([location.position(X, MM), location.position(Y, MM)])
+            brain.clear()
+            brain.print(len(cords_list))
+        else:
+            drivetrain.turn_for(LEFT, 90, DEGREES)
+        wait(5, MSEC)
+        pen.set_pen_color(BLUE)
+        pen.move(DOWN)
+
+    
+
+    # find the shortest path back to the starting point
+    
+    pen.set_pen_color(GREEN)
+    pen.move(DOWN)
+
+    cords_list.reverse()  # Reverse 
+
+    for i in range(len(cords_list)):
+        go_to(cords_list[i][0], cords_list[i][1])
+
+    # Once at home, stop the project
+    pen.move(UP)
+    stop_project()
+
+vr_thread(main())
